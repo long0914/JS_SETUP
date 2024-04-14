@@ -1,58 +1,56 @@
-
 //make a button to submit the search
 let btnSearch = document.getElementById("btnSearch");
 let inputSearch = document.getElementById("inputSearch");
 btnSearch.addEventListener("click", function(){
-  search = inputSearch.value;
-  getPosts(search);
+  let search = inputSearch.value;
+  DOM=getPosts(search);
+  console.log(DOM);
+
+  let weather = document.getElementById("weather");
+  
+
 });
 
 
 
 //search function
 async function getPosts(search) {
-  // let appId ="111cafe7";
-  // let appKey = "8fd24ad7ec497a9b870540a46518ae0d";
-  // const url = "https://api.adzuna.com/v1/api/jobs/gb/search/1?app_id=111cafe7&app_key=8fd24ad7ec497a9b870540a46518ae0d  ";
-
-  //weather api
   const apiKeyWeather ="88833963506943ecb51193430241404";
-  const urlWeather ="https://api.weatherapi.com/v1/current.xml?key=88833963506943ecb51193430241404&q=" + search + "&aqi=yes";
-  
+  const urlWeather =`https://api.weatherapi.com/v1/current.xml?key=${apiKeyWeather}&q=${search}&aqi=yes`;
 
   const response = await fetch(urlWeather);
   if(!response.ok){
     throw new Error("response error");
   }else{
-    console.log( `type of response is ${typeof(response)}`);
+    console.log(`type of response is ${typeof response}`);
+    console.log(response);
     
-
-  //response body is readableStream
-  
-  readStreamAsText(response);
-
-
-    
-
+    readStreamAsText(response);
   }
 }
 
-//make a stream reader of xml
+//responsebody is stream, get reader is a method to read the stream,
+//decoder is a method to decode the stream, value is the value of the stream
 async function readStreamAsText(response){
-
   const reader = response.body.getReader();
 
-  const decoder = new TextDecoder();
-
+  const decoder = new TextDecoder(); //dont know what is this
   let result = '';
+
   while (true) {
-    const { done, value } = await reader.read();
+    const { done, value } = await reader.read();//dont know what is this
     if (done) break;
-    result += decoder.decode(value);
+    result += decoder.decode(value);//dont know what is this
   }
-  console.log(result);
 
-
+  parseXML(result);
 }
-//make a manipulation of xml
+
+//dompasrser is an interface to parse source code to dom
+//parseFromString is a method to parse string to xml
+function parseXML(xmlStr) {
+  const parser = new DOMParser();//dont know
+  const xmlDoc = parser.parseFromString(xmlStr, "text/xml");
+  console.log(xmlDoc);
+}
 
