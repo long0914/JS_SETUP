@@ -1,26 +1,58 @@
 
-// function initMap(){
-
-// let dispalyMap = document.getElementById('displayMap');// what is it ar..
-// let rounteMap = document.getElementById('routeMap');
-
-// let map = new google.maps.Map(document.getElementById('map'), mapOpt);
-
-// let mapOpt = {
-//    zoom: 11,   center: { lat: 39.96118, lng: -82.99879},   streetViewControl: false,   mapTypeControl: false,   fullscreenControl: false }
+//make a button to submit the search
+let btnSearch = document.getElementById("btnSearch");
+let inputSearch = document.getElementById("inputSearch");
+btnSearch.addEventListener("click", function(){
+  search = inputSearch.value;
+  getPosts(search);
+});
 
 
-// }
 
-let map;
+//search function
+async function getPosts(search) {
+  // let appId ="111cafe7";
+  // let appKey = "8fd24ad7ec497a9b870540a46518ae0d";
+  // const url = "https://api.adzuna.com/v1/api/jobs/gb/search/1?app_id=111cafe7&app_key=8fd24ad7ec497a9b870540a46518ae0d  ";
 
-async function initMap() {
-  const { Map } = await google.maps.importLibrary("maps");
+  //weather api
+  const apiKeyWeather ="88833963506943ecb51193430241404";
+  const urlWeather ="https://api.weatherapi.com/v1/current.xml?key=88833963506943ecb51193430241404&q=" + search + "&aqi=yes";
+  
 
-  map = new Map(document.getElementById("map"), {
-    center: { lat: 40.397, lng: 150.644 },
-    zoom: 8,
-  });
+  const response = await fetch(urlWeather);
+  if(!response.ok){
+    throw new Error("response error");
+  }else{
+    console.log( `type of response is ${typeof(response)}`);
+    
+
+  //response body is readableStream
+  
+  readStreamAsText(response);
+
+
+    
+
+  }
 }
 
-initMap();
+//make a stream reader of xml
+async function readStreamAsText(response){
+
+  const reader = response.body.getReader();
+
+  const decoder = new TextDecoder();
+
+  let result = '';
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    result += decoder.decode(value);
+  }
+  console.log(result);
+
+
+}
+//make a manipulation of xml
+
