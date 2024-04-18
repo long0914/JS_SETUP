@@ -2,7 +2,7 @@
 body{
     width: 80vw;
     position: fixed;
-    left: 15vw;
+    left: 5vw;
     display: flex;
     flex-direction: row;
     margin: 0;
@@ -10,7 +10,7 @@ body{
     justify-self: center;
     align-self: center;
     font-family: 'Roboto', sans-serif;
-    background-color: #f1f1f1;
+    background-color: #b2f3f9;
     overflow-wrap: normal
 
 
@@ -24,6 +24,7 @@ body{
     border: solid 1px #000;
     overflow: hidden;
     margin: 10px;
+    border-radius: 10px;
 }
 
 
@@ -51,3 +52,13 @@ body{
     margin: 5px 0 5px 0;
     font-size: medium;
 }
+
+
+
+
+/* Set the size of the div element that contains the map */
+#map {
+    height: 400px; /* The height is 400 pixels */
+    width: 100%; /* The width is the width of the web page */
+}
+

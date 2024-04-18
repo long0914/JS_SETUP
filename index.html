@@ -6,6 +6,7 @@
     , initial-scale=1.0">
     <title>Document</title>
     <script defer src="app.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAym_NJ2Gc4syw6sEv8mz2aUXZG05ieHxU&callback=initMap"></script>
     <link rel="stylesheet" href="style.css">
 
     <style>
@@ -15,11 +16,15 @@
 <body>
 
 
-    <h1>KA HO HO 301324396 API</h1>
+    <div><h1>KA HO HO 301324396 API</h1>
+    <input type="text" id="inputSearch" placeholder="Enter name of a place">
+    <button id="btnSearch">Submit</button>
+    </div>
+
+    
     <div class="outerContainer">
-        <h3>Search weather here</h3>
-        <input type="text" id="inputSearch">
-        <button id="btnSearch">Submit</button>
+        <h3>weather</h3>
+        
         <div class="innerContainer" id="weather">
 
         </div>
@@ -28,7 +33,7 @@
     
 
     <div class="outerContainer">
-        <h3>Search News here</h3>
+        <h3>News of place</h3>
   
         <div class="innerContainer" id="news">
 
@@ -36,8 +41,8 @@
     </div>
 
     <div class="outerContainer">
-        <h3>Search Countries Holidays here</h3>
-        <div class="innerContainer" id="holidays">
+        <h3>detail of place</h3>
+        <div class="innerContainer" id="location">
 
         </div>
     </div>

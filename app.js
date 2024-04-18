@@ -12,7 +12,7 @@ btnSearch.addEventListener("click", async function(){
     alert(error);
   }
 
-  try{DOM = await holidaysGetPosts(search);}
+  try{DOM = await tourismGetPosts(search);}
   catch(error){
     alert(error);
   }
@@ -43,8 +43,6 @@ async function weatherGetPosts(search) {
   if(!response.ok){
     throw new Error("enter a valid city name");
   }else{
-    
-
     readStreamAsText(response);
   }
 }
@@ -63,22 +61,52 @@ async function newsGetPosts(search) {
 }
 
 
-async function holidaysGetPosts(search) {
+// async function holidaysGetPosts(search) {
   
-  const url = "https://holidays.abstractapi.com/v1/?api_key=e38d6b49ae7f4404b55105c679ab4426&country=US";
+//   const url = "https://holidays.abstractapi.com/v1/?api_key=e38d6b49ae7f4404b55105c679ab4426&country=US";
 
-  try {
-    const response = await fetch(url);
-    if(!response.ok){
-      const errorData = await response.text(); // Get response text
-      throw new Error(`Error ${response.status}: ${errorData}`);
-    }else{
-      readStreamAsText(response);
+//   try {
+//     const response = await fetch(url);
+//     if(!response.ok){
+//       const errorData = await response.text(); // Get response text
+//       throw new Error(`Error ${response.status}: ${errorData}`);
+//     }else{
+//       readStreamAsText(response);
+//     }
+//   } catch (error) {
+//     console.log(error.toString()); // Log error message
+//   }
+// }
+
+
+
+async function tourismGetPosts(search) {
+
+  const url = `https://opentripmap-places-v1.p.rapidapi.com/en/places/geoname?name=${search}`;
+  const options = {
+    method: 'GET',
+    headers: {
+      'X-RapidAPI-Key': '581171d718msh0e84312c6ca0ba0p1c04cajsn08bdb7177eef',
+      'X-RapidAPI-Host': 'opentripmap-places-v1.p.rapidapi.com'
     }
+  };
+  
+  
+  try {
+    const response = await fetch(url, options);
+    console.log(response);
+    readStreamAsText(response);
+
   } catch (error) {
-    console.log(error.toString()); // Log error message
+    console.error(error);
   }
+
 }
+
+
+
+
+
 
 
 
@@ -87,19 +115,93 @@ async function holidaysGetPosts(search) {
 //decoder is a method to decode the stream, value is the value of the stream
 async function readStreamAsText(response){
   const reader = response.body.getReader();
-  const decoder = new TextDecoder(); //dont know what is this
+
+  const decoder = new TextDecoder(); //declare new TextDecoder
   let result = '';
 
   while (true) {
-    const { done, value } = await reader.read();//dont know what is this
+    const { done, value } = await reader.read();//read the stream by reader, return done and value
     if (done) break;
-    result += decoder.decode(value);//dont know what is this
+    result += decoder.decode(value); //decode the value and add to result
   }
 
-  parseXML(result);
-  console.log("before parse to xlm"+result);
+  try{parseXML(result)}catch(error){  //distribute to xml function
+    console.log(error);
+    console.log("before parse to xlm"+result);
+  }
+  try{parseJson(result)}catch(error){  //distribute to json function
+    console.log(error);
+    console.log("before parse to json"+result);
+  }
+
+  
+}
+
+//not yet, 
+function parseJson(jsonStr){
+  const jsonObj = JSON.parse(jsonStr);
+  console.log('jsonObj is' + jsonObj);
+  locationAdder(jsonObj);
 
 }
+
+function locationAdder(jsonObj){
+  let location = document.getElementById("location");
+
+
+  let locationElement = document.createElement('h1');
+  locationElement.textContent = `Location name: ${jsonObj.name}`;
+
+  let countryElement = document.createElement('p');
+  countryElement.textContent = `Country: ${jsonObj.country}`;
+
+  let populationElement = document.createElement('p');
+  populationElement.textContent = `Population: ${jsonObj.population}`;
+
+  let timezoneElement = document.createElement('p');
+  timezoneElement.textContent = `Timezone: ${jsonObj.timezone}`;
+
+  let coordination = { lat: jsonObj.lat, lon: jsonObj.lon };
+  let map =document.createElement("div");
+  map.id = "map";
+  makeMap(coordination);
+
+
+  location.appendChild(locationElement);
+  location.appendChild(countryElement);
+  location.appendChild(populationElement);
+  location.appendChild(timezoneElement);
+  location.appendChild(map);
+
+}
+
+
+function makeMap(coordination){
+
+  console.log("get to makeMap>??");
+  let map;
+
+  async function initMap() {
+    const { Map } = await google.maps.importLibrary("maps");
+  
+    map = new Map(document.getElementById("map"), {
+      center: { lat: coordination.lat , lng: coordination.lon },
+      zoom: 8,
+    });
+
+    console.log(coordination.lat);
+  }
+  
+  initMap();
+
+  
+
+}
+
+
+
+
+
 //dompasrser is an interface to parse source code to dom
 //parseFromString is a method to parse string to xml
 function parseXML(xmlStr) {
@@ -112,8 +214,6 @@ function parseXML(xmlStr) {
     }
   
 }
-
-
 
 
 
