@@ -1,7 +1,6 @@
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-
-//how to use webpack??? detail configuration
 module.exports = {
   entry: './src/index.js',
   output: {
@@ -18,6 +17,20 @@ module.exports = {
         }
       }
     ]
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: 'public/index.html'
+    })
+  ],
+  devServer: {
+    static: {
+      directory: path.join(__dirname, 'public')
+    },
+    compress: true,
+    port: 9000,
+    hot: true,
+    open: true
   },
   mode: 'development'
 };
