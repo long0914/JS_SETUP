@@ -6,6 +6,7 @@ import About from "./src/about"; // Import the About component
 import Education from "./src/education"; // Import the Education component
 import Project from "./src/project"; // Import the Project component
 import Contact from "./src/contact"; // Import the Contact component
+import Service from "./src/service"; // Import the Service component
 
 import { Routes } from "react-router-dom";
 import Layout from "./layout";
@@ -20,6 +21,7 @@ const MainRouter = () => {
           <Route path="/about" element={<About />} />
           <Route path="/education" element={<Education />} />
           <Route path="/project" element={<Project />} />
+          <Route path="/service" element={<Service />} />
           <Route path="/contact" element={<Contact />} />
         </Routes>
       
